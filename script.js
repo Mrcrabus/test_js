@@ -17,24 +17,26 @@ const button = document.querySelector(".button")
 
 coursesList.sort((a, b) => a.prices[0] - b.prices[0])
 
-console.log(to.value)
-
 const showCourses = (list) => {
   courses.innerHTML = "";
   
   list.forEach((course, i) => {
     courses.innerHTML += `
         <li class="item">${ i + 1 }. ${ course.name } <b>${ course.prices[0] === null ? 0: course.prices[0] }
-                          ${ course.prices[1] === null ? '': course.prices[1] } </b>
+                          ${ course.prices[1] === null ? 100000: course.prices[1] } </b>
         </li>
     `;
   });
 }
 
 button.addEventListener("click", () => {
-  console.log(1)
+  if(+to.value < +from.value) {
+    to.value = from.value
+  }
+  
   let filteredList = [...coursesList]
-  filteredList = filteredList.filter(course => course.prices[0] <= from.value  && course.prices[1] <= (to.value || 1000000))
+  filteredList = filteredList.filter(course => (course.prices[1] || Infinity) >= from.value &&
+    (to.value || Infinity) >= course.prices[0])
   showCourses(filteredList);
 })
 
